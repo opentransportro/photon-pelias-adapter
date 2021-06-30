@@ -1,3 +1,6 @@
+const CONFIDENCE_BOOST_STATION = 4;
+const CONFIDENCE_BOOST_STOP = 2;
+
 const getLabel = properties => {
   const { name, street, housenumber, postalcode, city } = properties;
   const result = [];
@@ -48,7 +51,10 @@ exports.translateResults = (photonResult, gtfsDataset = "") => {
 
     if (feature.properties.osm_value == "bus_stop" || feature.properties.osm_value == "tram_stop") {
       feature.properties.layer = "stop";
-    } else if (feature.properties.osm_key == "railway" && feature.properties.osm_value == "station") {
+    } else if (
+      feature.properties.osm_key == "railway" &&
+      (feature.properties.osm_value == "station" || feature.properties.osm_value == "halt")
+    ) {
       feature.properties.layer = "station";
     } else {
       // `venue` is also applied to addresses but for the purpose of digitransit it does
@@ -67,6 +73,12 @@ exports.translateResults = (photonResult, gtfsDataset = "") => {
     }
 
     feature.properties.confidence = 100 - idx;
+    if (feature.properties.layer == "stop") {
+      feature.properties.confidence += CONFIDENCE_BOOST_STOP;
+    } else if (feature.properties.layer == "station") {
+      feature.properties.confidence += CONFIDENCE_BOOST_STATION;
+    }
+
     feature.properties.source = "openstreetmap";
 
     peliasResponse.features.push(feature);
