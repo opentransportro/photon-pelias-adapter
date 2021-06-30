@@ -72,13 +72,14 @@ exports.translateResults = (photonResult, gtfsDataset = "") => {
       feature.properties.id = "GTFS:" + gtfsDataset + ":" + ifoptid;
     }
 
-    feature.properties.confidence = 100 - idx;
+    let confidence = 100 - idx;
     if (feature.properties.layer == "stop") {
-      feature.properties.confidence += CONFIDENCE_BOOST_STOP;
+      confidence += CONFIDENCE_BOOST_STOP;
     } else if (feature.properties.layer == "station") {
-      feature.properties.confidence += CONFIDENCE_BOOST_STATION;
+      confidence += CONFIDENCE_BOOST_STATION;
     }
 
+    feature.properties.confidence = confidence / 100;
     feature.properties.source = "openstreetmap";
 
     peliasResponse.features.push(feature);
