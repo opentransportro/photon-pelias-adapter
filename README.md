@@ -21,3 +21,29 @@ Configuration:
 
 * Set port via `PORT` environment variable. Default `8080`.
 * Set Photon endpoint via environment variable `PHOTON_URL`. Default `https://photon.komoot.de`.
+
+## How to start
+
+Install required packages via `npm install`.
+
+To run photon pelias with defaults (port 8080, connecting to https://photon.komoot.io/), run via
+
+``` sh
+$ node index.js
+```
+
+else
+
+``` sh
+$ node index.js
+```
+
+```
+$ PHOTON_URL=https://photon.komoot.io/ PORT=8080 node index.js
+```
+
+Now you may test photon-pelias-adapter e.g. by requesting
+
+```
+http://localhost:8080/v1/search?text=Berlin
+```
