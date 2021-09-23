@@ -29,6 +29,7 @@ http
 const OSM_TAG_FILTERS = [
   "!amenity:car_sharing",
   "!amenity:bike_rental",
+  "!historic:memorial",
   "!boundary",
   "!landuse:construction",
   "!highway:service",
