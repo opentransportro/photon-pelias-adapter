@@ -5,7 +5,7 @@ var fetch = require("node-fetch");
 var PHOTON_URL = process.env.PHOTON_URL || "https://photon.komoot.io";
 var PORT = process.env.PORT || 8080;
 
-const { translateResults } = require("./translate.js");
+const { translateResults, translateReverseGeocoding } = require("./translate.js");
 
 http
   .createServer(function(req, res) {
@@ -121,6 +121,9 @@ function search(params, res) {
 }
 
 function reverse(params, res) {
+  const lat = params["point.lat"];
+  const lon = params["point.lon"];
+
   if (params["point.lat"] && params["point.lon"]) {
     let url = `${PHOTON_URL}/reverse?lon=${params["point.lon"]}&lat=${params["point.lat"]}&lang=${params.lang || "en"}`;
     fetch(url)
@@ -130,10 +133,11 @@ function reverse(params, res) {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*"
         });
-        res.write(JSON.stringify(translateResults(json)));
+        res.write(JSON.stringify(translateReverseGeocoding(lat, lon, json)));
         res.end();
       })
       .catch(err => {
+        console.log(err);
         writeError(res, 500, err);
       });
   } else {

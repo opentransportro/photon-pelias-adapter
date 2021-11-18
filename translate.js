@@ -28,7 +28,7 @@ const getName = properties => {
   } else return label;
 };
 
-exports.translateResults = (photonResult, gtfsDataset = "") => {
+const translateResults = (photonResult, gtfsDataset = "") => {
   let peliasResponse = {
     features: []
   };
@@ -86,3 +86,41 @@ exports.translateResults = (photonResult, gtfsDataset = "") => {
   });
   return peliasResponse;
 };
+
+const translateReverseGeocoding = (lat, lon, results) => {
+  if (results.features.length === 0) {
+    return {
+      features: [
+        {
+          geometry: {
+            coordinates: [lon, lat],
+            type: "Point"
+          },
+          type: "Feature",
+          properties: {
+            extent: [lon, lat, lon, lat],
+            country: null,
+            city: null,
+            countrycode: null,
+            county: null,
+            type: "house",
+            osm_type: "N",
+            street: null,
+            name: `${lat}, ${lon}`,
+            region: null,
+            postalcode: null,
+            locality: "Angermünde",
+            label: `${lat}, ${lon}`,
+            layer: "venue",
+            source: "openstreetmap"
+          }
+        }
+      ]
+    };
+  } else {
+    return translateResults(results);
+  }
+};
+
+exports.translateResults = translateResults;
+exports.translateReverseGeocoding = translateReverseGeocoding;
