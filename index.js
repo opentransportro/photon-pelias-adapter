@@ -50,6 +50,8 @@ function search(params, res) {
   let focusParam = null;
   let filterParam = null;
   let optionalGtfsDataset = "";
+  // TODO: remove this later. Force lang to english
+  params.lang = "en";
 
   if (params["layers"] && params["layers"].includes("bikestation")) {
     res.writeHead(200, {
@@ -123,6 +125,8 @@ function search(params, res) {
 function reverse(params, res) {
   const lat = params["point.lat"];
   const lon = params["point.lon"];
+  // TODO: remove this later. Force lang to english
+  params.lang = "en";
 
   if (params["point.lat"] && params["point.lon"]) {
     let url = `${PHOTON_URL}/reverse?lon=${params["point.lon"]}&lat=${params["point.lat"]}&lang=${params.lang || "en"}`;
